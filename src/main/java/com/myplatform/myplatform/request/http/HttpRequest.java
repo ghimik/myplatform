@@ -1,7 +1,6 @@
 package com.myplatform.myplatform.request.http;
 
 import com.myplatform.myplatform.request.AbstractRequest;
-import com.myplatform.myplatform.request.RequestParser;
 
 public abstract class HttpRequest extends AbstractRequest {
 
@@ -11,6 +10,7 @@ public abstract class HttpRequest extends AbstractRequest {
 
     public HttpRequestHead getHead() {return head;}
 
+    @Override
     public abstract HttpRequestParser getParser();
 
     public HttpRequest(HttpRequestHead head) {

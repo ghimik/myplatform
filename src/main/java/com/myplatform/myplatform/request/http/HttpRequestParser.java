@@ -36,10 +36,11 @@ public interface HttpRequestParser extends RequestParser {
         return head;
     }
 
-    @Override
     HttpRequest parse(String request);
 
     HttpRequestBody parseBody(String body);
+
+    HttpRequestBody parseBody();
 
     static MyHttpParams parseParams(String paramString) {
         Map<String, String> params = new HashMap<>();

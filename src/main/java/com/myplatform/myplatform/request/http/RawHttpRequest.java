@@ -11,13 +11,13 @@ public class RawHttpRequest extends HttpRequest{
     }
 
     @Override
-    public HttpRequestBody getBody() {
+    public RawHttpRequestBody getBody() {
         return body;
     }
 
     @Override
     public HttpRequestParser getParser() {
-        return new RawRequestParser();
+        return new RawHttpRequestParser();
     }
 
     public RawHttpRequest() {

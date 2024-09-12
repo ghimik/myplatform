@@ -8,7 +8,8 @@ public class RawHttpRequestBody extends HttpRequestBody {
         this.body = body;
     }
 
-    public String getBody() {
+    @Override
+    public String getStringRepresentation() {
         return body;
     }
 }

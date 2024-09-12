@@ -1,6 +1,10 @@
 package com.myplatform.myplatform.request.http;
 
-public class ParametrizedHttpRequest extends HttpRequest{
+import com.myplatform.myplatform.request.RequestParser;
+
+import java.lang.reflect.Type;
+
+public class ParametrizedHttpRequest extends HttpRequest {
 
     private final ParametrizedHttpRequestBody body;
 
@@ -10,12 +14,19 @@ public class ParametrizedHttpRequest extends HttpRequest{
     }
 
     @Override
-    public HttpRequestBody getBody() {
+    public ParametrizedHttpRequestBody getBody() {
         return body;
     }
 
     @Override
     public HttpRequestParser getParser() {
         return new ParametrizedHttpRequestParser();
+    }
+
+    public static ParametrizedHttpRequest fromRaw(HttpRequest request, Type type) {
+        return new ParametrizedHttpRequest(
+                request.getHead(),
+                new ParametrizedHttpRequestBody(type, request.getBody().getStringRepresentation())
+        );
     }
 }

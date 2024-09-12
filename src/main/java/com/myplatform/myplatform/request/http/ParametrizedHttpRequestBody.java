@@ -12,6 +12,8 @@ public class ParametrizedHttpRequestBody extends HttpRequestBody{
 
     String content;
 
+    final ObjectMapper objectMapper = new ObjectMapper();
+
     public ParametrizedHttpRequestBody(Type type, String content) {
         this(content);
         this.type = type;
@@ -24,8 +26,13 @@ public class ParametrizedHttpRequestBody extends HttpRequestBody{
      public <T> T parseContent() throws JsonProcessingException {
             if (type == null)
                 throw new NullPointerException("Type is not defined");
-            ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.readValue(content,
                     TypeToJavaTypeAdapter.toType(type));
-        }
+    }
+
+
+    @Override
+    public String getStringRepresentation() {
+        return content;
+    }
 }
