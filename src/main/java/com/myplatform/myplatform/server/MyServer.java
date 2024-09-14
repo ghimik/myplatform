@@ -8,12 +8,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.LinkedTransferQueue;
 
-public final class MyServer {
+public class MyServer {
 
-    private final static LinkedTransferQueue<InternetConnection> connections
+    private static LinkedTransferQueue<InternetConnection> connections
             = new LinkedTransferQueue<>();
 
-    public static void run(Integer port) {
+    public void run(Integer port) {
         try (ServerSocket server = new ServerSocket(port)){
             System.out.println("Status: server started.");
 

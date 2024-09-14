@@ -60,6 +60,7 @@ public class DefaultHttpRouter implements HttpRouter {
             }
         }
         catch (Exception ex) {
+            // RETURN badrequest
             ex.printStackTrace();
         }
 

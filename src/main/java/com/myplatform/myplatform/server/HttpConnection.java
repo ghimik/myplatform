@@ -23,13 +23,14 @@ public class HttpConnection extends InternetConnection {
         try {
             HttpRequest request = new RawHttpRequest();
             HttpRequestParser parser = request.getParser();
+            System.out.println("Status: Started parsing");
             request = parser.parse(requestReader.read(socket));
+            System.out.println("Status: raw request parsed");
+
             RequestWriter.write(socket, router.handle(request).getFormatted());
             requestReader.close();
-
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
 

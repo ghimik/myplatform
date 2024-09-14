@@ -9,6 +9,8 @@ public final class MyBootApplication {
     private static final CommandLineArgumentsParser parser
             = new CommandLineArgumentsParser();
 
+    private static final MyServer server = new MyServer();
+
     public static void run(String[] args) {
         try {
             parser.parse(args);
@@ -16,6 +18,6 @@ public final class MyBootApplication {
             System.out.println(e.getLocalizedMessage());
             System.exit(-1);
         }
-        MyServer.run(parser.getPort());
+        server.run(parser.getPort());
     }
 }

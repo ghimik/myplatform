@@ -16,7 +16,7 @@ public final class HttpRouterConfig {
                     .back()
                         .addMapping("/test2")
                         .setupEndpoint()
-                        .addEndpoint(TestEndpointHandler::new)
+                        .addEndpoint(TestBodyEndpoint::new)
                 ;
         router = new DefaultHttpRouter(root);
     }
