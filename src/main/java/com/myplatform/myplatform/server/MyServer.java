@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedTransferQueue;
 
 public class MyServer {
 
@@ -27,7 +26,7 @@ public class MyServer {
                 System.out.println("Status: main thread is free.");
 
             }
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             System.out.println(ex.getLocalizedMessage());
             ex.printStackTrace();
         } finally {

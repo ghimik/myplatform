@@ -28,12 +28,12 @@ public class DefaultHttpRouter implements HttpRouter {
 
         String url = "/" + urls.next();
         try {
-            while(current != null) {
+            while (current != null) {
                 System.out.println("Current handling " + current);
 
                 HttpFilterSegment currentFilterSegment = current.getNavigator().getFilters();
                 if (!Objects.isNull(currentFilterSegment))
-                    for (HttpFilterHandler filter: current.getNavigator().getFilters().getFilters()) {
+                    for (HttpFilterHandler filter : current.getNavigator().getFilters().getFilters()) {
                         System.out.println("Filter " + filter + " - working!");
 
                         HttpFilterResult result = filter.filter(request, builder);
@@ -52,15 +52,21 @@ public class DefaultHttpRouter implements HttpRouter {
                             builder
                     );
 
-                System.out.println("Handled url: " +url);
+                System.out.println("Handled url: " + url);
                 url = "/" + urls.next();
                 current = current.getNavigator().navigate(url);
 
             }
-        }
-        catch (Exception ex) {
-            // RETURN badrequest
+            if (urls.hasNext())
+                return HttpResponse.badRequest("Invalid request data");
+
+        } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
+            return HttpResponse.badRequest("Malformed URL");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return HttpResponse.internalServerError("Unexpected error occurred");
+
         }
 
         return builder.build();

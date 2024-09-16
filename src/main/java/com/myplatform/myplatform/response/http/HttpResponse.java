@@ -2,7 +2,10 @@ package com.myplatform.myplatform.response.http;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myplatform.myplatform.MyHttpHeaders;
 import com.myplatform.myplatform.response.AbstractResponse;
+
+import java.util.Map;
 
 public class HttpResponse<T> extends AbstractResponse {
 
@@ -53,5 +56,29 @@ public class HttpResponse<T> extends AbstractResponse {
     @Override
     public HttpResponseBuilder getBuilder() {
         return new HttpResponseBuilder();
+    }
+
+    public static HttpResponse<String> ok(String bodyContent) {
+        return new HttpResponse<>(
+                new HttpResponseHead(new MyHttpHeaders(Map.of("Content-Type", "application/json")),
+                                                            new HttpResponseStatus(200)),
+                new HttpResponseBody<>(bodyContent)
+        );
+    }
+
+    public static HttpResponse<String> badRequest(String message) {
+        return new HttpResponse<>(
+                new HttpResponseHead(new MyHttpHeaders(Map.of("Content-Type", "application/json")),
+                                                            new HttpResponseStatus(400)),
+                new HttpResponseBody<>(message)
+        );
+    }
+
+    public static HttpResponse<String> internalServerError(String message) {
+        return new HttpResponse<>(
+                new HttpResponseHead(new MyHttpHeaders(Map.of("Content-Type", "application/json")),
+                                                            new HttpResponseStatus(500)),
+                new HttpResponseBody<>(message)
+        );
     }
 }

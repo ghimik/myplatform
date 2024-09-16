@@ -23,6 +23,7 @@ public class HttpResponseStatus {
             case 200 -> "OK";
             // ..
             case 400 -> "Bad request";
+            case 404 -> "Not found";
             case 500 -> "Internal Server Error";
             default -> "";
         };
