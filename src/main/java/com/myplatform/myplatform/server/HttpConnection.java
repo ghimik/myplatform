@@ -28,10 +28,18 @@ public class HttpConnection extends InternetConnection {
             System.out.println("Status: raw request parsed");
 
             RequestWriter.write(socket, router.handle(request).getFormatted());
-            requestReader.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
+        }
+        finally {
+            try {
+                requestReader.close();
+                socket.close();
+                System.out.println("Status: closed connection");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }

@@ -1,32 +1,37 @@
 package com.myplatform.myplatform.server;
 
-import com.myplatform.myplatform.server.InternetConnection;
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedTransferQueue;
 
 public class MyServer {
 
-    private static LinkedTransferQueue<InternetConnection> connections
-            = new LinkedTransferQueue<>();
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
+
 
     public void run(Integer port) {
-        try (ServerSocket server = new ServerSocket(port)){
+        try (ServerSocket server = new ServerSocket(port)) {
             System.out.println("Status: server started.");
 
             while (true) {
                 Socket clientSocket = server.accept();
-                connections.add(new HttpConnection(clientSocket));
                 System.out.println("Status: accepted client.");
-                connections.take().start();
-                System.out.println("Status: served client.");
+                executorService.submit(() -> {
+                    System.out.println("Status: started serving client.");
+                    new HttpConnection(clientSocket).run();
+                    System.out.println("Status: served client.");
+                });
+                System.out.println("Status: main thread is free.");
+
             }
-        } catch (IOException | InterruptedException ex) {
+        } catch (IOException ex) {
             System.out.println(ex.getLocalizedMessage());
             ex.printStackTrace();
+        } finally {
+            executorService.shutdown();
         }
     }
 

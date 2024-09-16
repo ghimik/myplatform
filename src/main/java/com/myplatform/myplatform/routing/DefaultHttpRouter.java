@@ -26,7 +26,6 @@ public class DefaultHttpRouter implements HttpRouter {
                 .stream(request.getHead().getUrl().split("/"))
                 .iterator();
 
-        System.out.println(Arrays.toString(request.getHead().getUrl().split("/")));
         String url = "/" + urls.next();
         try {
             while(current != null) {

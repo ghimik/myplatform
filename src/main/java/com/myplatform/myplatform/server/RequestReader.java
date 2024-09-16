@@ -16,7 +16,6 @@ public class RequestReader {
         String line;
         while ((line = input.readLine()) != null && !line.isEmpty()) {
             stringRequest.append(line).append("\r\n");
-            System.out.println("Read line: " + line);
         }
         stringRequest.append("\r\n");
 
@@ -25,10 +24,10 @@ public class RequestReader {
             char[] body = new char[contentLength];
             input.read(body, 0, contentLength);
             stringRequest.append(body);
-            System.out.println("Read body: " + new String(body));
         }
 
-        System.out.println("Status: request read");
+        System.out.println("Status: Request read");
+        System.out.println(stringRequest);
         return stringRequest.toString();
     }
 
