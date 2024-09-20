@@ -1,6 +1,5 @@
 package com.myplatform.myplatform.embedded.request.http;
 
-import com.myplatform.myplatform.request.RequestParser;
 
 import java.lang.reflect.Type;
 

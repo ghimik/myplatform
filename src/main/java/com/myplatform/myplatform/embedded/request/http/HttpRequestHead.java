@@ -1,6 +1,5 @@
 package com.myplatform.myplatform.embedded.request.http;
 
-import com.myplatform.myplatform.request.http.MyHttpRequestMethod;
 import com.myplatform.myplatform.MyHttpHeaders;
 
 public class HttpRequestHead {

@@ -1,7 +1,7 @@
 package com.myplatform.myplatform.embedded.server;
 
 
-import com.myplatform.myplatform.util.CommandLineArgumentsParser;
+import com.myplatform.myplatform.embedded.util.CommandLineArgumentsParser;
 import org.kohsuke.args4j.CmdLineException;
 
 public final class MyBootApplication {

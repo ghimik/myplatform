@@ -2,7 +2,7 @@ package com.myplatform.myplatform.embedded.request.http;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.myplatform.myplatform.util.TypeToJavaTypeAdapter;
+import com.myplatform.myplatform.embedded.util.TypeToJavaTypeAdapter;
 
 import java.lang.reflect.Type;
 
