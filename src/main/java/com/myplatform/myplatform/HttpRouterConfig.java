@@ -1,6 +1,13 @@
 package com.myplatform.myplatform;
 
-import com.myplatform.myplatform.routing.*;
+
+import com.myplatform.myplatform.embedded.routing.DefaultHttpRouter;
+import com.myplatform.myplatform.embedded.routing.HttpRouter;
+import com.myplatform.myplatform.embedded.routing.HttpRouterSegment;
+import com.myplatform.myplatform.embedded.routing.HttpRouterSegmentImpl;
+import com.myplatform.myplatform.endpoints.TestBodyEndpoint;
+import com.myplatform.myplatform.endpoints.TestEndpointHandler;
+import com.myplatform.myplatform.endpoints.TestFilterHandler;
 
 public final class HttpRouterConfig {
     static {
