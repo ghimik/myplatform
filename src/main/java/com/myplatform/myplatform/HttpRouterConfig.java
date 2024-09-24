@@ -7,7 +7,7 @@ import com.myplatform.myplatform.embedded.routing.HttpRouterSegment;
 import com.myplatform.myplatform.embedded.routing.HttpRouterSegmentImpl;
 import com.myplatform.myplatform.endpoints.TestBodyEndpoint;
 import com.myplatform.myplatform.endpoints.TestEndpointHandler;
-import com.myplatform.myplatform.endpoints.TestFilterHandler;
+import filter.TestFilterHandler;
 
 public final class HttpRouterConfig {
     static {

@@ -25,6 +25,11 @@ public class AuthenticationImpl implements Authentication {
         )
             return new AuthenticationImpl(this.service, true);
 
-        return this;
+        return new AuthenticationImpl(this.service, false);
+    }
+
+    @Override
+    public Boolean getStatus() {
+        return this.status;
     }
 }

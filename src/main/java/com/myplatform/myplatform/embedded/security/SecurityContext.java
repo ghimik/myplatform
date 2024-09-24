@@ -2,6 +2,8 @@ package com.myplatform.myplatform.embedded.security;
 
 public interface SecurityContext {
 
-    Authentication verify(AuthenticationToken token);
+    void addAuthentication(Authentication authentication);
+
+    Boolean verify(AuthenticationToken token);
 
 }

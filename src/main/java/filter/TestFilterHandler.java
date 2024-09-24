@@ -1,4 +1,4 @@
-package com.myplatform.myplatform.endpoints;
+package filter;
 
 
 import com.myplatform.myplatform.embedded.request.http.HttpRequest;
