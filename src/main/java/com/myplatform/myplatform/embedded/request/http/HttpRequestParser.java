@@ -3,7 +3,6 @@ package com.myplatform.myplatform.embedded.request.http;
 import com.myplatform.myplatform.MyHttpHeaders;
 import com.myplatform.myplatform.embedded.request.RequestParser;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

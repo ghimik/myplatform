@@ -1,35 +1,21 @@
 package com.myplatform.myplatform.embedded.security;
 
 public class AuthenticationImpl implements Authentication {
+    private final UserDetails principal;
+    private final boolean authenticated;
 
-    private final Boolean status;
-
-    private final UserDataService service;
-
-    public AuthenticationImpl(UserDataService service) {
-        this.service = service;
-        this.status = false;
-    }
-
-    AuthenticationImpl(UserDataService service, Boolean status) {
-        this.service = service;
-        this.status = status;
+    public AuthenticationImpl(UserDetails principal, boolean authenticated) {
+        this.principal = principal;
+        this.authenticated = authenticated;
     }
 
     @Override
-    public Authentication authenticate(AuthenticationToken token) {
-        UserInfo userInfo = token.getUserInfo();
-
-        if (userInfo.equals(
-                service.getUserInfo(userInfo.getUsername(), userInfo.getPassword()))
-        )
-            return new AuthenticationImpl(this.service, true);
-
-        return new AuthenticationImpl(this.service, false);
+    public UserDetails getPrincipal() {
+        return principal;
     }
 
     @Override
-    public Boolean getStatus() {
-        return this.status;
+    public boolean isAuthenticated() {
+        return authenticated;
     }
 }
