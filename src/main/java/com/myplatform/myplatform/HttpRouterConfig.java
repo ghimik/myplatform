@@ -7,6 +7,7 @@ import com.myplatform.myplatform.embedded.routing.HttpRouterSegment;
 import com.myplatform.myplatform.embedded.routing.HttpRouterSegmentImpl;
 import com.myplatform.myplatform.endpoints.TestBodyEndpoint;
 import com.myplatform.myplatform.endpoints.TestEndpointHandler;
+import filter.AuthenticationHttpFilter;
 import filter.TestFilterHandler;
 
 public final class HttpRouterConfig {
@@ -19,11 +20,21 @@ public final class HttpRouterConfig {
                     .endSetup()
                         .addMapping("/test")
                         .setupEndpoint()
-                        .addEndpoint(TestEndpointHandler::new)
+                            .addEndpoint(TestEndpointHandler::new)
                     .back()
                         .addMapping("/test2")
                         .setupEndpoint()
-                        .addEndpoint(TestBodyEndpoint::new)
+                            .addEndpoint(TestBodyEndpoint::new)
+                    .back()
+                .addMapping("/sec")
+                    .setupFilters()
+                        .addFilter(AuthenticationHttpFilter::new)
+                    .endSetup()
+                    .setupEndpoint()
+                        .addEndpoint(TestEndpointHandler::new)
+
+
+
                 ;
         router = new DefaultHttpRouter(root);
     }
