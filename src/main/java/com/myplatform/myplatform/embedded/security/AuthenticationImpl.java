@@ -4,9 +4,14 @@ public class AuthenticationImpl implements Authentication {
     private final UserDetails principal;
     private final boolean authenticated;
 
-    public AuthenticationImpl(UserDetails principal, boolean authenticated) {
+    AuthenticationImpl(UserDetails principal, boolean authenticated) {
         this.principal = principal;
         this.authenticated = authenticated;
+    }
+
+    public AuthenticationImpl(UserDetails principal) {
+        this.principal = principal;
+        authenticated = false;
     }
 
     @Override
