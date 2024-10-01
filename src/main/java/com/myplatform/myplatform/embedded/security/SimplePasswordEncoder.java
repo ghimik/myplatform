@@ -9,4 +9,9 @@ public class SimplePasswordEncoder implements PasswordEncoder {
         String encodedRawPassword = Base64.getEncoder().encodeToString(rawPassword.getBytes());
         return encodedRawPassword.equals(encodedPassword);
     }
+
+    @Override
+    public String encode(String password) {
+        return Base64.getEncoder().encodeToString(password.getBytes());
+    }
 }

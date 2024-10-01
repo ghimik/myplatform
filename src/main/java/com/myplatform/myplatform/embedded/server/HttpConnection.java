@@ -12,18 +12,18 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.net.Socket;
 
-@Component
 public class HttpConnection extends InternetConnection {
 
-    @Autowired
-    private HttpRouter router;
+    private final HttpRouter router;
 
-    public HttpConnection(Socket socket) {
+    public HttpConnection(Socket socket, HttpRouter router) {
         super(socket);
+        this.router = router;
     }
 
     @Override
     public void run() {
+        System.out.println("Status: New connection started");
         try {
             HttpRequest request = new RawHttpRequest();
             HttpRequestParser parser = request.getParser();

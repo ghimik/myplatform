@@ -5,15 +5,19 @@ import com.myplatform.myplatform.embedded.routing.DefaultHttpRouter;
 import com.myplatform.myplatform.embedded.routing.HttpRouter;
 import com.myplatform.myplatform.embedded.routing.HttpRouterSegment;
 import com.myplatform.myplatform.embedded.routing.HttpRouterSegmentImpl;
+import com.myplatform.myplatform.endpoints.LoginEndpointHandler;
+import com.myplatform.myplatform.endpoints.RegistrationEndpointHandler;
 import com.myplatform.myplatform.endpoints.TestBodyEndpoint;
 import com.myplatform.myplatform.endpoints.TestEndpointHandler;
 import com.myplatform.myplatform.filter.AuthenticationHttpFilter;
 import com.myplatform.myplatform.filter.TestFilterHandler;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
+@ComponentScan
 public class HttpRouterConfig {
 
     @Bean
@@ -24,21 +28,21 @@ public class HttpRouterConfig {
                     .setupFilters()
                         .addFilter(TestFilterHandler::new)
                     .endSetup()
-                        .addMapping("/test")
+                    .addMapping("/auth")
+                        .addMapping("/register")
                         .setupEndpoint()
-                            .addEndpoint(TestEndpointHandler::new)
-                    .back()
-                        .addMapping("/test2")
+                            .addEndpoint(RegistrationEndpointHandler::new)
+                        .back()
+                        .addMapping("/login")
                         .setupEndpoint()
-                            .addEndpoint(TestBodyEndpoint::new)
-                    .back()
+                            .addEndpoint(LoginEndpointHandler::new)
+                        .back()
                 .addMapping("/sec")
                     .setupFilters()
                         .addFilter(AuthenticationHttpFilter::new)
                     .endSetup()
                     .setupEndpoint()
-                        .addEndpoint(TestEndpointHandler::new)
-                ;
+                        .addEndpoint(TestEndpointHandler::new);
 
         return new DefaultHttpRouter(root);
     }

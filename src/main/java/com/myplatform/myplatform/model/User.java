@@ -1,10 +1,11 @@
 package com.myplatform.myplatform.model;
 
+import com.myplatform.myplatform.embedded.security.UserDetails;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
@@ -26,8 +27,14 @@ public class User {
         this.id = id;
     }
 
+    @Override
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public String getPassword() {
+        return getPasswordHash();
     }
 
     public void setUsername(String username) {

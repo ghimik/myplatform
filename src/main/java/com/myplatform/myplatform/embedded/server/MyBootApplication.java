@@ -1,21 +1,21 @@
 package com.myplatform.myplatform.embedded.server;
 
-
 import com.myplatform.myplatform.BeanConfig;
 import com.myplatform.myplatform.JpaConfig;
+import com.myplatform.myplatform.PlatformApplication;
 import com.myplatform.myplatform.embedded.util.CommandLineArgumentsParser;
 import com.myplatform.myplatform.flyway.FlywayMigration;
-import com.myplatform.myplatform.repo.UserRepository;
 import org.kohsuke.args4j.CmdLineException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
+@Component
 public final class MyBootApplication {
 
     private static final CommandLineArgumentsParser parser
             = new CommandLineArgumentsParser();
 
-    private static final MyServer server = new MyServer();
 
     public static void run(String[] args) {
         try {
@@ -25,6 +25,10 @@ public final class MyBootApplication {
             System.exit(-1);
         }
         FlywayMigration.migrate();
+
+        ApplicationContext context = new AnnotationConfigApplicationContext(PlatformApplication.class);
+        MyServer server = context.getBean(MyServer.class);
+
         server.run(parser.getPort());
     }
 }
