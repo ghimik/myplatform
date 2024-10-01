@@ -9,12 +9,11 @@ import com.myplatform.myplatform.embedded.response.http.HttpResponseStatus;
 import com.myplatform.myplatform.embedded.routing.HttpEndpointHandler;
 import com.myplatform.myplatform.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.naming.AuthenticationException;
 import java.lang.reflect.Type;
+import java.util.UUID;
 
-@Component
 public class LoginEndpointHandler implements HttpEndpointHandler {
 
     @Autowired
@@ -26,10 +25,12 @@ public class LoginEndpointHandler implements HttpEndpointHandler {
 
         LoginDto body = request.getBody().parseContent();
         try {
-            authenticationService.authenticate(body.getUsername(), body.getPassword());
+            String token = authenticationService.authenticate(body.getUsername(), body.getPassword());
             builder.setStatus(new HttpResponseStatus(200));
+            builder.addHeader(AuthenticationService.AUTHORIZATION_HEADER, token);
             return builder.build();
         } catch (AuthenticationException e) {
+            e.printStackTrace();
             builder.setStatus(new HttpResponseStatus(400));
             return builder.build();
         }

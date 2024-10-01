@@ -21,6 +21,26 @@ import org.springframework.context.annotation.Configuration;
 public class HttpRouterConfig {
 
     @Bean
+    public RegistrationEndpointHandler registrationEndpointHandler() {
+        return new RegistrationEndpointHandler();
+    }
+
+    @Bean
+    public LoginEndpointHandler loginEndpointHandler() {
+        return new LoginEndpointHandler();
+    }
+
+    @Bean
+    public AuthenticationHttpFilter authenticationHttpFilter() {
+        return new AuthenticationHttpFilter();
+    }
+
+    @Bean
+    public TestEndpointHandler testEndpointHandler() {
+        return new TestEndpointHandler();
+    }
+
+    @Bean
     public HttpRouter router() {
         HttpRouterSegment root = new HttpRouterSegmentImpl("/");
         root
@@ -31,18 +51,19 @@ public class HttpRouterConfig {
                     .addMapping("/auth")
                         .addMapping("/register")
                         .setupEndpoint()
-                            .addEndpoint(RegistrationEndpointHandler::new)
+                            .addEndpoint(this::registrationEndpointHandler)
                         .back()
                         .addMapping("/login")
                         .setupEndpoint()
-                            .addEndpoint(LoginEndpointHandler::new)
+                            .addEndpoint(this::loginEndpointHandler)
                         .back()
-                .addMapping("/sec")
-                    .setupFilters()
-                        .addFilter(AuthenticationHttpFilter::new)
-                    .endSetup()
-                    .setupEndpoint()
-                        .addEndpoint(TestEndpointHandler::new);
+                    .back()
+                    .addMapping("/sec")
+                        .setupFilters()
+                            .addFilter(this::authenticationHttpFilter)
+                        .endSetup()
+                        .setupEndpoint()
+                            .addEndpoint(this::testEndpointHandler);
 
         return new DefaultHttpRouter(root);
     }

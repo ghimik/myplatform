@@ -1,15 +1,28 @@
 package com.myplatform.myplatform.embedded.security;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class SecurityContextImpl implements SecurityContext {
-    private Authentication authentication;
+
+    private final ApiKeyGenerator apiKeyGenerator;
+
+    public SecurityContextImpl(ApiKeyGenerator apiKeyGenerator) {
+        this.apiKeyGenerator = apiKeyGenerator;
+    }
+
+    private final HashMap<String, Authentication> authenticationHashMap =
+            new HashMap<>();
 
     @Override
-    public void setAuthentication(Authentication authentication) {
-        this.authentication = authentication;
+    public String setAuthentication(Authentication authentication) {
+        String uuid = apiKeyGenerator.generateApiKey();
+        authenticationHashMap.put(uuid, authentication);
+        return uuid;
     }
 
     @Override
-    public Authentication getAuthentication() {
-        return authentication;
+    public Authentication getAuthentication(String uuid) {
+        return authenticationHashMap.get(uuid);
     }
 }

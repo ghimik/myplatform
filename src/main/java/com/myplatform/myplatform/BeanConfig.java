@@ -11,12 +11,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages = {
+        "com.myplatform.myplatform.service",
+        "com.myplatform.myplatform.repo",
+        "com.myplatform.myplatform.endpoints",
+        "com.myplatform.myplatform"
+})
 public class BeanConfig {
 
     @Bean
     public SecurityContext securityContext() {
-        return new SecurityContextImpl();
+        return new SecurityContextImpl(apiKeyGenerator());
     }
 
     @Bean
@@ -25,12 +30,8 @@ public class BeanConfig {
     }
 
     @Bean
-    public AuthenticationService authenticationService(UserDetailsService userDetailsService,
-                                                       SecurityContext securityContext,
-                                                       PasswordEncoder passwordEncoder,
-                                                       @Autowired UserRepository userRepository) {
-        return new AuthenticationService(userDetailsService, securityContext,
-                passwordEncoder, userRepository);
+    public ApiKeyGenerator apiKeyGenerator() {
+        return new ApiKeyGenerator();
     }
 
 }
