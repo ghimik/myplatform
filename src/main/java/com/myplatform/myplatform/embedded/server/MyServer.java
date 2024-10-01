@@ -9,7 +9,6 @@ public class MyServer {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-
     public void run(Integer port) {
         try (ServerSocket server = new ServerSocket(port)) {
             System.out.println("Status: server started.");

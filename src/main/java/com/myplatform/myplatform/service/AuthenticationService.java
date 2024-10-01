@@ -2,15 +2,20 @@ package com.myplatform.myplatform.service;
 
 
 import com.myplatform.myplatform.embedded.security.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
 
+
+@Service
 public class AuthenticationService {
 
     private final UserDetailsService userDetailsService;
     private final SecurityContext securityContext;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public AuthenticationService(UserDetailsService userDetailsService,
                                  SecurityContext securityContext,
                                  PasswordEncoder passwordEncoder) {

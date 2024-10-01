@@ -7,11 +7,17 @@ import com.myplatform.myplatform.embedded.routing.HttpRouterSegment;
 import com.myplatform.myplatform.embedded.routing.HttpRouterSegmentImpl;
 import com.myplatform.myplatform.endpoints.TestBodyEndpoint;
 import com.myplatform.myplatform.endpoints.TestEndpointHandler;
-import filter.AuthenticationHttpFilter;
-import filter.TestFilterHandler;
+import com.myplatform.myplatform.filter.AuthenticationHttpFilter;
+import com.myplatform.myplatform.filter.TestFilterHandler;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-public final class HttpRouterConfig {
-    static {
+
+@Configuration
+public class HttpRouterConfig {
+
+    @Bean
+    public HttpRouter router() {
         HttpRouterSegment root = new HttpRouterSegmentImpl("/");
         root
                 .addMapping("/api")
@@ -32,15 +38,9 @@ public final class HttpRouterConfig {
                     .endSetup()
                     .setupEndpoint()
                         .addEndpoint(TestEndpointHandler::new)
-
-
-
                 ;
-        router = new DefaultHttpRouter(root);
+
+        return new DefaultHttpRouter(root);
     }
-
-    public static HttpRouter router;
-
-
 
 }

@@ -6,13 +6,17 @@ import com.myplatform.myplatform.embedded.request.http.HttpRequest;
 import com.myplatform.myplatform.embedded.request.http.HttpRequestParser;
 import com.myplatform.myplatform.embedded.request.http.RawHttpRequest;
 import com.myplatform.myplatform.embedded.routing.HttpRouter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.Socket;
 
+@Component
 public class HttpConnection extends InternetConnection {
 
-    private final HttpRouter router = HttpRouterConfig.router;
+    @Autowired
+    private HttpRouter router;
 
     public HttpConnection(Socket socket) {
         super(socket);

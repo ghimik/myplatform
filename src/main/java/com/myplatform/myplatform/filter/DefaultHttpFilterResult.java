@@ -1,4 +1,4 @@
-package filter;
+package com.myplatform.myplatform.filter;
 
 import com.myplatform.myplatform.embedded.response.http.HttpResponse;
 import com.myplatform.myplatform.embedded.routing.HttpFilterResult;

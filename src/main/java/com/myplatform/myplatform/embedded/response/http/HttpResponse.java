@@ -2,7 +2,7 @@ package com.myplatform.myplatform.embedded.response.http;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.myplatform.myplatform.MyHttpHeaders;
+import com.myplatform.myplatform.embedded.MyHttpHeaders;
 import com.myplatform.myplatform.embedded.response.AbstractResponse;
 
 import java.util.Map;

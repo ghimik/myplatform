@@ -1,4 +1,4 @@
-package com.myplatform.myplatform;
+package com.myplatform.myplatform.embedded;
 
 import java.util.Map;
 
