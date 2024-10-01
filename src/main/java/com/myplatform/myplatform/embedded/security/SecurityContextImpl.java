@@ -25,4 +25,9 @@ public class SecurityContextImpl implements SecurityContext {
     public Authentication getAuthentication(String uuid) {
         return authenticationHashMap.get(uuid);
     }
+
+    @Override
+    public void removeAuthentication(String token) {
+        authenticationHashMap.remove(token);
+    }
 }

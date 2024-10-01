@@ -7,6 +7,7 @@ import java.util.UUID;
 public interface SecurityContext {
     String setAuthentication(Authentication authentication);
     Authentication getAuthentication(String uuid);
+    void removeAuthentication(String token);
 }
 
 

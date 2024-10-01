@@ -5,10 +5,7 @@ import com.myplatform.myplatform.embedded.routing.DefaultHttpRouter;
 import com.myplatform.myplatform.embedded.routing.HttpRouter;
 import com.myplatform.myplatform.embedded.routing.HttpRouterSegment;
 import com.myplatform.myplatform.embedded.routing.HttpRouterSegmentImpl;
-import com.myplatform.myplatform.endpoints.LoginEndpointHandler;
-import com.myplatform.myplatform.endpoints.RegistrationEndpointHandler;
-import com.myplatform.myplatform.endpoints.TestBodyEndpoint;
-import com.myplatform.myplatform.endpoints.TestEndpointHandler;
+import com.myplatform.myplatform.endpoints.*;
 import com.myplatform.myplatform.filter.AuthenticationHttpFilter;
 import com.myplatform.myplatform.filter.TestFilterHandler;
 import org.springframework.context.annotation.Bean;
@@ -41,6 +38,11 @@ public class HttpRouterConfig {
     }
 
     @Bean
+    public LogoutEndpointHandler logoutEndpointHandler() {
+        return new LogoutEndpointHandler();
+    }
+
+    @Bean
     public HttpRouter router() {
         HttpRouterSegment root = new HttpRouterSegmentImpl("/");
         root
@@ -56,6 +58,10 @@ public class HttpRouterConfig {
                         .addMapping("/login")
                         .setupEndpoint()
                             .addEndpoint(this::loginEndpointHandler)
+                        .back()
+                        .addMapping("/logout")
+                        .setupEndpoint()
+                            .addEndpoint(this::logoutEndpointHandler)
                         .back()
                     .back()
                     .addMapping("/sec")

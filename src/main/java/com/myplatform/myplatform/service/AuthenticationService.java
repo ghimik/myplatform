@@ -63,6 +63,10 @@ public class AuthenticationService {
         userRepository.saveAndFlush(newUser);
     }
 
+    public void logout(String authToken) {
+        securityContext.removeAuthentication(authToken);
+    }
+
     public Authentication getAuthentication(HttpRequest request) {
         String token = request.getHead().getHeaders().getContent().get(AUTHORIZATION_HEADER);
         return securityContext.getAuthentication(token);
