@@ -21,6 +21,7 @@ public class HttpResponseStatus {
     public String getDescription() {
         return switch (code) {
             case 200 -> "OK";
+            case 201 -> "Created";
             // ..
             case 400 -> "Bad request";
             case 404 -> "Not found";

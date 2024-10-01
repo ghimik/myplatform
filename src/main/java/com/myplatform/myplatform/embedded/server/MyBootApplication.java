@@ -1,7 +1,5 @@
 package com.myplatform.myplatform.embedded.server;
 
-import com.myplatform.myplatform.BeanConfig;
-import com.myplatform.myplatform.JpaConfig;
 import com.myplatform.myplatform.PlatformApplication;
 import com.myplatform.myplatform.embedded.util.CommandLineArgumentsParser;
 import com.myplatform.myplatform.flyway.FlywayMigration;
