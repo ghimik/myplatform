@@ -1,5 +1,6 @@
 package com.myplatform.myplatform.service;
 
+import com.myplatform.myplatform.dto.PageDto;
 import com.myplatform.myplatform.model.Page;
 import com.myplatform.myplatform.repo.PageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,15 @@ public class PageService {
 
     public void deletePage(Integer id) {
         pageRepository.deleteById(id);
+    }
+
+    public PageDto getPageById(Integer pageId) {
+        Page page = pageRepository.findById(pageId).orElseThrow();
+        PageDto pageDto = new PageDto();
+        pageDto.setTitle(page.getTitle());
+        pageDto.setWorkspaceId(page.getWorkspaceId());
+        pageDto.setContent(page.getContent());
+        pageDto.setParentPageId(page.getParentPageId());
+        return pageDto;
     }
 }

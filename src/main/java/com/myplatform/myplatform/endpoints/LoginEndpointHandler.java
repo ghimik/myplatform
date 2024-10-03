@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.naming.AuthenticationException;
 import java.lang.reflect.Type;
-import java.util.UUID;
 
 public class LoginEndpointHandler implements HttpEndpointHandler {
 
