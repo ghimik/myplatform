@@ -32,3 +32,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+src/main/java/secret
+src/main/java/secret/

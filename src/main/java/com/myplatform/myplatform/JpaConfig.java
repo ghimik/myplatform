@@ -1,5 +1,6 @@
 package com.myplatform.myplatform;
 
+import com.myplatform.myplatform.secret.DbPovt;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,9 +26,9 @@ public class JpaConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/rution");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("admin");
+        dataSource.setUrl("jdbc:postgresql://" + DbPovt.povt + ":5432/rution");
+        dataSource.setUsername(DbPovt.username);
+        dataSource.setPassword(DbPovt.password);
         return dataSource;
     }
 
