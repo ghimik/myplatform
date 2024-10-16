@@ -24,12 +24,16 @@ public class BlockEndpointHandler implements HttpEndpointHandler {
             throws JsonProcessingException {
         MyHttpRequestMethod method = HttpRequestHelper.getStatus(request);
 
-        return switch (method) {
-            case GET -> handleGetBlock(request, builder);
-            case PUT -> handleUpdateBlock(request, builder);
-            case DELETE -> handleDeleteBlock(request, builder);
-            default -> builder.setStatus(new HttpResponseStatus(405)).build(); // Method Not Allowed
-        };
+        switch (method) {
+            case GET:
+                return handleGetBlock(request, builder);
+            case PUT:
+                return handleUpdateBlock(request, builder);
+            case DELETE:
+                return handleDeleteBlock(request, builder);
+            default:
+                return builder.setStatus(new HttpResponseStatus(405)).build(); // Method Not Allowed
+        }
     }
 
     private HttpResponse<?> handleGetBlock(ParametrizedHttpRequest request, HttpResponseBuilder builder) {

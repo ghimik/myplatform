@@ -1,7 +1,7 @@
 package com.myplatform.myplatform.model;
 
 import com.myplatform.myplatform.embedded.security.UserDetails;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "users")

@@ -1,7 +1,7 @@
 package com.myplatform.myplatform.model;
 
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "permissions")

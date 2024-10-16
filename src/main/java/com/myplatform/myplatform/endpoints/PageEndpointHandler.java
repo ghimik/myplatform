@@ -24,12 +24,16 @@ public class PageEndpointHandler implements HttpEndpointHandler {
             throws JsonProcessingException {
         MyHttpRequestMethod method = HttpRequestHelper.getStatus(request);
 
-        return switch (method) {
-            case GET -> handleGetPage(request, builder);
-            case PUT -> handleUpdatePage(request, builder);
-            case DELETE -> handleDeletePage(request, builder);
-            default -> builder.setStatus(new HttpResponseStatus(405)).build(); // Method Not Allowed
-        };
+        switch (method) {
+            case GET:
+                return handleGetPage(request, builder);
+            case PUT:
+                return handleUpdatePage(request, builder);
+            case DELETE:
+                return handleDeletePage(request, builder);
+            default:
+                return builder.setStatus(new HttpResponseStatus(405)).build(); // Method Not Allowed
+        }
     }
 
     private HttpResponse<?> handleGetPage(ParametrizedHttpRequest request, HttpResponseBuilder builder) {

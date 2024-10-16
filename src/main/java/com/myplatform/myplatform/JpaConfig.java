@@ -1,7 +1,7 @@
 package com.myplatform.myplatform;
 
 import com.myplatform.myplatform.secret.DbPovt;
-import jakarta.persistence.EntityManagerFactory;
+import javax.persistence.EntityManagerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

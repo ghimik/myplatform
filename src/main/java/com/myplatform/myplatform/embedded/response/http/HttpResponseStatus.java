@@ -19,14 +19,20 @@ public class HttpResponseStatus {
     }
 
     public String getDescription() {
-        return switch (code) {
-            case 200 -> "OK";
-            case 201 -> "Created";
+        switch (code) {
+            case 200:
+                return "OK";
+            case 201:
+                return "Created";
             // ..
-            case 400 -> "Bad request";
-            case 404 -> "Not found";
-            case 500 -> "Internal Server Error";
-            default -> "";
-        };
+            case 400:
+                return "Bad request";
+            case 404:
+                return "Not found";
+            case 500:
+                return "Internal Server Error";
+            default:
+                return "";
+        }
     }
 }
