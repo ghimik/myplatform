@@ -35,10 +35,6 @@ public class HttpRouterConfig {
         return new PageEndpointHandler();
     }
 
-    @Bean
-    public BlockEndpointHandler blockEndpointHandler() {
-        return new BlockEndpointHandler();
-    }
 
     @Bean
     public PermissionEndpointHandler permissionEndpointHandler() {
@@ -93,10 +89,6 @@ public class HttpRouterConfig {
                             .addMapping("/pages")
                                 .setupEndpoint()
                                     .addEndpoint(this::pageEndpointHandler)
-                                .back()
-                            .addMapping("/blocks")
-                                .setupEndpoint()
-                                    .addEndpoint(this::blockEndpointHandler)
                                 .back()
                             .addMapping("/permissions")
                                 .setupEndpoint()

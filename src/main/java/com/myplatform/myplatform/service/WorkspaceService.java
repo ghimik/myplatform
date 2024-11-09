@@ -15,25 +15,33 @@ public class WorkspaceService {
     @Autowired
     private WorkspaceRepository workspaceRepository;
 
-    public Workspace createWorkspace(Integer ownerId, String name) {
+    public List<WorkspaceDto> getWorkspacesByUserId(Integer userId) {
+        List<Workspace> workspaces = workspaceRepository.findByOwnerId(userId);
+        return workspaces.stream().map(WorkspaceService::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public WorkspaceDto getWorkspaceById(Integer workspaceId) {
+        Workspace workspace = workspaceRepository.findById(workspaceId)
+                .orElseThrow(() -> new RuntimeException("Workspace not found"));
+        return convertToDto(workspace);
+    }
+
+    public void createWorkspace(Integer ownerId, String name) {
         Workspace workspace = new Workspace();
         workspace.setOwnerId(ownerId);
         workspace.setName(name);
-        return workspaceRepository.save(workspace);
+        workspaceRepository.save(workspace);
     }
 
-    public List<Workspace> findWorkspacesByOwnerId(Integer ownerId) {
-        return workspaceRepository.findByOwnerId(ownerId);
-    }
-
-    public List<WorkspaceDto> getAllWorkspaces() {
-        return workspaceRepository.findAll().stream().map(
-                workspace -> {
-                    WorkspaceDto workspaceDto = new WorkspaceDto();
-                    workspaceDto.setName(workspace.getName());
-                    workspaceDto.setOwnerId(workspace.getOwnerId());
-                    return workspaceDto;
-                }
-        ).collect(Collectors.toUnmodifiableList());
+    static WorkspaceDto convertToDto(Workspace workspace) {
+        WorkspaceDto dto = new WorkspaceDto();
+        dto.setWorkspaceId(workspace.getId());
+        dto.setOwnerId(workspace.getOwnerId());
+        dto.setName(workspace.getName());
+        dto.setPages(workspace.getPages().stream()
+                .map(PageService::convertToDto)
+                .collect(Collectors.toList()));
+        return dto;
     }
 }

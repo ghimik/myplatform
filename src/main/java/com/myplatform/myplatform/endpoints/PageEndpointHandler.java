@@ -13,6 +13,7 @@ import com.myplatform.myplatform.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 
 public class PageEndpointHandler implements HttpEndpointHandler {
 
@@ -37,39 +38,50 @@ public class PageEndpointHandler implements HttpEndpointHandler {
     }
 
     private HttpResponse<?> handleGetPage(ParametrizedHttpRequest request, HttpResponseBuilder builder) {
-        String pageId = HttpRequestHelper.getParams(request).get("id");
+        Integer pageId = Integer.parseInt(HttpRequestHelper.getParams(request).get("pageId"));
+        Integer workspaceId = Integer.parseInt(HttpRequestHelper.getParams(request).get("workspaceId"));
+
         try {
-            PageDto page = pageService.getPageById(Integer.valueOf(pageId));
+            PageDto pageDto = pageService.getPageByIdAndWorkspace(pageId, workspaceId);
             builder.setStatus(new HttpResponseStatus(200));
-            builder.setBody(page);
+            builder.setBody(pageDto);
             return builder.build();
         } catch (Exception e) {
-            builder.setStatus(new HttpResponseStatus(404)); // Not Found
+            builder.setStatus(new HttpResponseStatus(404));
+            builder.setBody(Map.of("error", "Page not found"));
             return builder.build();
         }
     }
 
     private HttpResponse<?> handleUpdatePage(ParametrizedHttpRequest request, HttpResponseBuilder builder) throws JsonProcessingException {
         PageDto body = request.getBody().parseContent();
-        String pageId = HttpRequestHelper.getParams(request).get("id");
+        Integer pageId = Integer.parseInt(HttpRequestHelper.getParams(request).get("pageId"));
+        Integer workspaceId = Integer.parseInt(HttpRequestHelper.getParams(request).get("workspaceId"));
+
         try {
-            pageService.updatePage(Integer.valueOf(pageId), body.getTitle(), body.getContent());
-            builder.setStatus(new HttpResponseStatus(200)); // OK
+            pageService.updatePage(pageId, workspaceId, body);
+            builder.setStatus(new HttpResponseStatus(200));
+            builder.setBody(Map.of("status", "Page updated successfully"));
             return builder.build();
         } catch (Exception e) {
-            builder.setStatus(new HttpResponseStatus(400)); // Bad Request
+            builder.setStatus(new HttpResponseStatus(400));
+            builder.setBody(Map.of("error", "Invalid page data"));
             return builder.build();
         }
     }
 
     private HttpResponse<?> handleDeletePage(ParametrizedHttpRequest request, HttpResponseBuilder builder) {
-        String pageId = HttpRequestHelper.getParams(request).get("id");
+        Integer pageId = Integer.parseInt(HttpRequestHelper.getParams(request).get("pageId"));
+        Integer workspaceId = Integer.parseInt(HttpRequestHelper.getParams(request).get("workspaceId"));
+
         try {
-            pageService.deletePage(Integer.valueOf(pageId));
-            builder.setStatus(new HttpResponseStatus(200)); // OK
+            pageService.deletePage(pageId, workspaceId);
+            builder.setStatus(new HttpResponseStatus(200));
+            builder.setBody(Map.of("status", "Page deleted successfully"));
             return builder.build();
         } catch (Exception e) {
-            builder.setStatus(new HttpResponseStatus(400)); // Bad Request
+            builder.setStatus(new HttpResponseStatus(400));
+            builder.setBody(Map.of("error", "Invalid page ID"));
             return builder.build();
         }
     }

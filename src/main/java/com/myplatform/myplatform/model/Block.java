@@ -11,8 +11,9 @@ public class Block {
     @SequenceGenerator(name = "block_seq", sequenceName = "block_seq", allocationSize = 1)
     private Integer id;
 
-    @Column(name = "page_id", nullable = false)
-    private Integer pageId;
+    @ManyToOne
+    @JoinColumn(name = "page_id", nullable = false)
+    private Page page;
 
     @Column(name = "type", nullable = false)
     private String type;
@@ -20,7 +21,6 @@ public class Block {
     @Column(name = "content", nullable = false)
     private String content;
 
-    // Getters and Setters
     public Integer getId() {
         return id;
     }
@@ -29,12 +29,12 @@ public class Block {
         this.id = id;
     }
 
-    public Integer getPageId() {
-        return pageId;
+    public Page getPage() {
+        return page;
     }
 
-    public void setPageId(Integer pageId) {
-        this.pageId = pageId;
+    public void setPage(Page page) {
+        this.page = page;
     }
 
     public String getType() {

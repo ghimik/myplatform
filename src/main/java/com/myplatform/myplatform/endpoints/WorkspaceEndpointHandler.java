@@ -21,37 +21,48 @@ public class WorkspaceEndpointHandler implements HttpEndpointHandler {
     private WorkspaceService workspaceService;
 
     @Override
-    public HttpResponse<?> handle(ParametrizedHttpRequest request, HttpResponseBuilder builder)
-            throws JsonProcessingException {
+    public HttpResponse<?> handle(ParametrizedHttpRequest request, HttpResponseBuilder builder) throws JsonProcessingException {
         MyHttpRequestMethod method = HttpRequestHelper.getStatus(request);
 
-        if (method == MyHttpRequestMethod.GET) {
-            return handleGetWorkspaces(builder);
-        }
-        WorkspaceDto body = request.getBody().parseContent();
-        try {
-            workspaceService.createWorkspace(body.getOwnerId(), body.getName());
-            builder.setStatus(new HttpResponseStatus(201)); // Created
-            return builder.build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            builder.setStatus(new HttpResponseStatus(400)); // Bad Request
-            return builder.build();
+        switch (method) {
+            case GET:
+                return handleGetWorkspaces(request, builder);
+            case POST:
+                return handleCreateWorkspace(request, builder);
+            default:
+                builder.setStatus(new HttpResponseStatus(405)); // Method Not Allowed
+                return builder.build();
         }
     }
 
-    private HttpResponse<?> handleGetWorkspaces(HttpResponseBuilder builder) {
+    private HttpResponse<?> handleGetWorkspaces(ParametrizedHttpRequest request, HttpResponseBuilder builder) {
+        String userIdStr = HttpRequestHelper.getParams(request).get("userId");
         try {
-            List<WorkspaceDto> workspaces = workspaceService.getAllWorkspaces();
+            Integer userId = Integer.valueOf(userIdStr);
+            List<WorkspaceDto> workspaces = workspaceService.getWorkspacesByUserId(userId);
             builder.setStatus(new HttpResponseStatus(200));
             builder.setBody(workspaces);
             return builder.build();
         } catch (Exception e) {
-            builder.setStatus(new HttpResponseStatus(500));
+            builder.setStatus(new HttpResponseStatus(500)); // Internal Server Error
+            builder.setBody("{\"error\": \"Internal Server Error\"}");
             return builder.build();
         }
     }
 
+    private HttpResponse<?> handleCreateWorkspace(ParametrizedHttpRequest request, HttpResponseBuilder builder) throws JsonProcessingException {
+        WorkspaceDto body = request.getBody().parseContent();
+        try {
+            workspaceService.createWorkspace(body.getOwnerId(), body.getName());
+            builder.setStatus(new HttpResponseStatus(201)); // Created
+            builder.setBody("{\"status\": \"Workspace created successfully\"}");
+            return builder.build();
+        } catch (Exception e) {
+            builder.setStatus(new HttpResponseStatus(400)); // Bad Request
+            builder.setBody("{\"error\": \"Invalid data for workspace creation\"}");
+            return builder.build();
+        }
+    }
 
     @Override
     public Type getExpectedBodyType() {

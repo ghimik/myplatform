@@ -1,6 +1,7 @@
 package com.myplatform.myplatform.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "pages")
@@ -11,17 +12,22 @@ public class Page {
     @SequenceGenerator(name = "page_seq", sequenceName = "page_seq", allocationSize = 1)
     private Integer id;
 
-    @Column(name = "workspace_id", nullable = false)
-    private Integer workspaceId;
+    @ManyToOne
+    @JoinColumn(name = "workspace_id", nullable = false)
+    private Workspace workspace;
 
-    @Column(name = "parent_page_id")
-    private Integer parentPageId;
+    @ManyToOne
+    @JoinColumn(name = "parent_page_id")
+    private Page parentPage;
 
     @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Block> blocks;
 
     // Getters and Setters
     public Integer getId() {
@@ -32,20 +38,20 @@ public class Page {
         this.id = id;
     }
 
-    public Integer getWorkspaceId() {
-        return workspaceId;
+    public Workspace getWorkspace() {
+        return workspace;
     }
 
-    public void setWorkspaceId(Integer workspaceId) {
-        this.workspaceId = workspaceId;
+    public void setWorkspace(Workspace workspace) {
+        this.workspace = workspace;
     }
 
-    public Integer getParentPageId() {
-        return parentPageId;
+    public Page getParentPage() {
+        return parentPage;
     }
 
-    public void setParentPageId(Integer parentPageId) {
-        this.parentPageId = parentPageId;
+    public void setParentPage(Page parentPage) {
+        this.parentPage = parentPage;
     }
 
     public String getTitle() {
@@ -62,5 +68,13 @@ public class Page {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public List<Block> getBlocks() {
+        return blocks;
+    }
+
+    public void setBlocks(List<Block> blocks) {
+        this.blocks = blocks;
     }
 }
