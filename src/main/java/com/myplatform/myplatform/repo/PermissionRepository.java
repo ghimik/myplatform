@@ -9,6 +9,5 @@ import java.util.List;
 @Repository
 public interface PermissionRepository extends JpaRepository<Permission, Integer> {
 
-    List<Permission> findByPageId(Integer pageId);
 
 }

@@ -1,6 +1,5 @@
 package com.myplatform.myplatform.model;
 
-
 import javax.persistence.*;
 
 @Entity
@@ -15,8 +14,8 @@ public class Permission {
     @Column(name = "user_id", nullable = false)
     private Integer userId;
 
-    @Column(name = "page_id", nullable = false)
-    private Integer pageId;
+    @Column(name = "workspace_id", nullable = false)
+    private Integer workspaceId;
 
     @Column(name = "permission_type", nullable = false)
     private String permissionType;
@@ -38,12 +37,12 @@ public class Permission {
         this.userId = userId;
     }
 
-    public Integer getPageId() {
-        return pageId;
+    public Integer getWorkspaceId() {
+        return workspaceId;
     }
 
-    public void setPageId(Integer pageId) {
-        this.pageId = pageId;
+    public void setWorkspaceId(Integer workspaceId) {
+        this.workspaceId = workspaceId;
     }
 
     public String getPermissionType() {

@@ -29,6 +29,8 @@ public class HttpResponseStatus {
                 return "Bad request";
             case 404:
                 return "Not found";
+            case 405:
+                return "Method Not Allowed";
             case 500:
                 return "Internal Server Error";
             default:

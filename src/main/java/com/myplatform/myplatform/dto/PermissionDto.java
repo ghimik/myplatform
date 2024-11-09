@@ -1,9 +1,9 @@
 package com.myplatform.myplatform.dto;
 
-
 public class PermissionDto {
+
     private Integer userId;
-    private Integer pageId;
+    private Integer workspaceId;
     private String permissionType;
 
     public Integer getUserId() {
@@ -14,12 +14,12 @@ public class PermissionDto {
         this.userId = userId;
     }
 
-    public Integer getPageId() {
-        return pageId;
+    public Integer getWorkspaceId() {
+        return workspaceId;
     }
 
-    public void setPageId(Integer pageId) {
-        this.pageId = pageId;
+    public void setWorkspaceId(Integer workspaceId) {
+        this.workspaceId = workspaceId;
     }
 
     public String getPermissionType() {

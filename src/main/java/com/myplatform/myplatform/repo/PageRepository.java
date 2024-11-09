@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PageRepository extends JpaRepository<Page, Integer> {
-    List<Page> findByWorkspaceId(Integer workspaceId);
 
 }
