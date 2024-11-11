@@ -24,6 +24,7 @@ public class DefaultHttpRouter implements HttpRouter {
         HttpRouterSegment current = root;
         Iterator<String> urls = Arrays
                 .stream(request.getHead().getUrl().split("/"))
+                .map(DefaultHttpRouter::removeQueryString)
                 .iterator();
 
         String url = "/" + urls.next();
@@ -70,5 +71,13 @@ public class DefaultHttpRouter implements HttpRouter {
         }
 
         return builder.build();
+    }
+
+     private static String removeQueryString(String url) {
+        int queryIndex = url.indexOf('?');
+        if (queryIndex != -1) {
+            return url.substring(0, queryIndex);
+        }
+        return url;
     }
 }

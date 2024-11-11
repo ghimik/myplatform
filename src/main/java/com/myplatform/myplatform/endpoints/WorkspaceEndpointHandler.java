@@ -36,10 +36,10 @@ public class WorkspaceEndpointHandler implements HttpEndpointHandler {
     }
 
     private HttpResponse<?> handleGetWorkspaces(ParametrizedHttpRequest request, HttpResponseBuilder builder) {
-        String userIdStr = HttpRequestHelper.getParams(request).get("userId");
+        String workspaceIdString = HttpRequestHelper.getParams(request).get("id");
         try {
-            Integer userId = Integer.valueOf(userIdStr);
-            List<WorkspaceDto> workspaces = workspaceService.getWorkspacesByUserId(userId);
+            Integer workspaceId = Integer.valueOf(workspaceIdString);
+            WorkspaceDto workspaces = workspaceService.getWorkspacesByWorkspaceId(workspaceId);
             builder.setStatus(new HttpResponseStatus(200));
             builder.setBody(workspaces);
             return builder.build();

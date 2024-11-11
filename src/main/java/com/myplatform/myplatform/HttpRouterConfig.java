@@ -57,6 +57,9 @@ public class HttpRouterConfig {
     }
 
     @Bean
+    public WorkspacesEndpointHandler workspacesEndpointHandler() {return new WorkspacesEndpointHandler();}
+
+    @Bean
     public HttpRouter router() {
         HttpRouterSegment root = new HttpRouterSegmentImpl("/");
         root
@@ -82,6 +85,10 @@ public class HttpRouterConfig {
                         .setupFilters()
                             .addFilter(this::authenticationHttpFilter)
                         .endSetup()
+                            .addMapping("/workspacesList")
+                                .setupEndpoint()
+                                .addEndpoint(this::workspacesEndpointHandler)
+                            .back()
                             .addMapping("/workspaces")
                                 .setupEndpoint()
                                     .addEndpoint(this::workspaceEndpointHandler)

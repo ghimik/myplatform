@@ -1,7 +1,10 @@
 package com.myplatform.myplatform.service;
 
 import com.myplatform.myplatform.dto.WorkspaceDto;
+import com.myplatform.myplatform.dto.WorkspacesDto;
+import com.myplatform.myplatform.model.User;
 import com.myplatform.myplatform.model.Workspace;
+import com.myplatform.myplatform.repo.UserRepository;
 import com.myplatform.myplatform.repo.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +18,24 @@ public class WorkspaceService {
     @Autowired
     private WorkspaceRepository workspaceRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public List<WorkspaceDto> getWorkspacesByUserId(Integer userId) {
         List<Workspace> workspaces = workspaceRepository.findByOwnerId(userId);
         return workspaces.stream().map(WorkspaceService::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    public WorkspaceDto getWorkspacesByWorkspaceId(Integer workspaceId) {
+        Workspace workspace = workspaceRepository.findById(workspaceId)
+                .orElseThrow();
+        return convertToDto(workspace);
+    }
+
+    public WorkspacesDto getWorkspacesList(String username) {
+        User user = userRepository.findByUsername(username);
+        return WorkspacesDto.fromWorkspaceList(workspaceRepository.findByOwnerId(user.getId()));
     }
 
     public WorkspaceDto getWorkspaceById(Integer workspaceId) {
