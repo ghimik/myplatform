@@ -44,10 +44,11 @@ public class WorkspaceService {
         return convertToDto(workspace);
     }
 
-    public void createWorkspace(Integer ownerId, String name) {
+    public void createWorkspace(String username, String name) {
         Workspace workspace = new Workspace();
-        workspace.setOwnerId(ownerId);
         workspace.setName(name);
+        User user = userRepository.findByUsername(username);
+        workspace.setOwnerId(user.getId());
         workspaceRepository.save(workspace);
     }
 

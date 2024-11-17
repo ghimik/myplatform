@@ -6,7 +6,7 @@ import com.myplatform.myplatform.embedded.routing.HttpRouterSegment;
 import com.myplatform.myplatform.embedded.routing.HttpRouterSegmentImpl;
 import com.myplatform.myplatform.endpoints.*;
 import com.myplatform.myplatform.filter.AuthenticationHttpFilter;
-import com.myplatform.myplatform.filter.TestFilterHandler;
+import com.myplatform.myplatform.filter.CorsFilterHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -47,11 +47,6 @@ public class HttpRouterConfig {
     }
 
     @Bean
-    public TestEndpointHandler testEndpointHandler() {
-        return new TestEndpointHandler();
-    }
-
-    @Bean
     public LogoutEndpointHandler logoutEndpointHandler() {
         return new LogoutEndpointHandler();
     }
@@ -65,7 +60,7 @@ public class HttpRouterConfig {
         root
                 .addMapping("/api")
                     .setupFilters()
-                        .addFilter(TestFilterHandler::new)
+                        .addFilter(CorsFilterHandler::new)
                     .endSetup()
                     .addMapping("/auth")
                         .addMapping("/register")

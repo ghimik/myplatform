@@ -1,6 +1,8 @@
 package com.myplatform.myplatform.endpoints;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myplatform.myplatform.dto.WorkspaceCreationDto;
 import com.myplatform.myplatform.dto.WorkspaceDto;
 import com.myplatform.myplatform.embedded.request.http.MyHttpRequestMethod;
 import com.myplatform.myplatform.embedded.request.http.ParametrizedHttpRequest;
@@ -8,7 +10,9 @@ import com.myplatform.myplatform.embedded.response.http.HttpResponse;
 import com.myplatform.myplatform.embedded.response.http.HttpResponseBuilder;
 import com.myplatform.myplatform.embedded.response.http.HttpResponseStatus;
 import com.myplatform.myplatform.embedded.routing.HttpEndpointHandler;
+import com.myplatform.myplatform.embedded.security.SecurityContext;
 import com.myplatform.myplatform.embedded.util.HttpRequestHelper;
+import com.myplatform.myplatform.service.AuthenticationService;
 import com.myplatform.myplatform.service.WorkspaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +23,9 @@ public class WorkspaceEndpointHandler implements HttpEndpointHandler {
 
     @Autowired
     private WorkspaceService workspaceService;
+
+    @Autowired
+    private SecurityContext securityContext;
 
     @Override
     public HttpResponse<?> handle(ParametrizedHttpRequest request, HttpResponseBuilder builder) throws JsonProcessingException {
@@ -51,9 +58,15 @@ public class WorkspaceEndpointHandler implements HttpEndpointHandler {
     }
 
     private HttpResponse<?> handleCreateWorkspace(ParametrizedHttpRequest request, HttpResponseBuilder builder) throws JsonProcessingException {
-        WorkspaceDto body = request.getBody().parseContent();
+        ObjectMapper mapper = new ObjectMapper();
+        WorkspaceCreationDto body = mapper.readValue(request.getBody().getStringRepresentation(),
+                WorkspaceCreationDto.class);
         try {
-            workspaceService.createWorkspace(body.getOwnerId(), body.getName());
+            String uuid = request.getHead().getHeaders().getContent()
+                .get(AuthenticationService.AUTHORIZATION_HEADER);
+            String username = securityContext.getAuthentication(uuid).getPrincipal().getUsername();
+
+            workspaceService.createWorkspace(username, body.getName());
             builder.setStatus(new HttpResponseStatus(201)); // Created
             builder.setBody("{\"status\": \"Workspace created successfully\"}");
             return builder.build();

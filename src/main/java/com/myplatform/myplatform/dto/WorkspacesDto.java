@@ -24,7 +24,7 @@ public class WorkspacesDto {
                 workspace -> {
                     WorkspaceBrief brief = new WorkspaceBrief();
                     brief.setWorkspaceTitle(workspace.getName());
-                    brief.setWorkspaceId(workspace.getOwnerId());
+                    brief.setWorkspaceId(workspace.getId());
                     return brief;
                 })
                 .collect(Collectors.toList()));
