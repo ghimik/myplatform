@@ -32,6 +32,9 @@ public class PageEndpointHandler implements HttpEndpointHandler {
                 return handleUpdatePage(request, builder);
             case DELETE:
                 return handleDeletePage(request, builder);
+            case POST:
+                return handleAddPage(request, builder);
+
             default:
                 return builder.setStatus(new HttpResponseStatus(405)).build(); // Method Not Allowed
         }
@@ -82,6 +85,22 @@ public class PageEndpointHandler implements HttpEndpointHandler {
         } catch (Exception e) {
             builder.setStatus(new HttpResponseStatus(400));
             builder.setBody(Map.of("error", "Invalid page ID"));
+            return builder.build();
+        }
+    }
+
+    private HttpResponse<?> handleAddPage(ParametrizedHttpRequest request, HttpResponseBuilder builder) throws JsonProcessingException {
+        PageDto body = request.getBody().parseContent();
+        Integer workspaceId = Integer.parseInt(HttpRequestHelper.getParams(request).get("workspaceId"));
+
+        try {
+            PageDto createdPage = pageService.addPage(workspaceId, body);
+            builder.setStatus(new HttpResponseStatus(201)); // Created
+            builder.setBody(createdPage);
+            return builder.build();
+        } catch (Exception e) {
+            builder.setStatus(new HttpResponseStatus(400));
+            builder.setBody(Map.of("error", "Failed to create page"));
             return builder.build();
         }
     }

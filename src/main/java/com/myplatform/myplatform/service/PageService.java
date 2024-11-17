@@ -67,6 +67,34 @@ public class PageService {
         pageRepository.delete(pageOpt.get());
     }
 
+    public PageDto addPage(Integer workspaceId, PageDto pageDto) {
+        Optional<Workspace> workspaceOpt = workspaceRepository.findById(workspaceId);
+        if (workspaceOpt.isEmpty()) {
+            throw new RuntimeException("Workspace not found");
+        }
+
+        Workspace workspace = workspaceOpt.get();
+        Page page = new Page();
+        page.setTitle(pageDto.getTitle());
+        page.setContent("");
+        page.setWorkspace(workspace);
+
+        if (pageDto.getPageBlocks() != null) {
+            page.setBlocks(pageDto.getPageBlocks().stream()
+                    .map(blockDto -> {
+                        Block block = new Block();
+                        block.setPage(page);
+                        block.setType(blockDto.getType());
+                        block.setContent(blockDto.getContent());
+                        return block;
+                    }).collect(Collectors.toList()));
+        }
+
+        Page savedPage = pageRepository.save(page);
+        return convertToDto(savedPage);
+    }
+
+
     static PageDto convertToDto(Page page) {
         PageDto dto = new PageDto();
         dto.setTitle(page.getTitle());
