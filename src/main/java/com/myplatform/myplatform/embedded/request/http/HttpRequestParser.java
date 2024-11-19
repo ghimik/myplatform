@@ -2,6 +2,7 @@ package com.myplatform.myplatform.embedded.request.http;
 
 import com.myplatform.myplatform.embedded.MyHttpHeaders;
 import com.myplatform.myplatform.embedded.request.RequestParser;
+import com.myplatform.myplatform.endpoints.EmptyRequestException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,9 @@ public interface HttpRequestParser extends RequestParser {
         HttpRequestHead head = new HttpRequestHead();
 
         String[] lines = requestHead.split("\r\n");
+        if (lines.length == 0) {
+            throw new EmptyRequestException();
+        }
         String[] requestLine = lines[0].split(" ");
 
         MyHttpRequestMethod method = MyHttpRequestMethod.valueOf(requestLine[0]);

@@ -8,6 +8,7 @@ import com.myplatform.myplatform.repo.UserRepository;
 import com.myplatform.myplatform.repo.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,23 +22,34 @@ public class WorkspaceService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional
     public List<WorkspaceDto> getWorkspacesByUserId(Integer userId) {
         List<Workspace> workspaces = workspaceRepository.findByOwnerId(userId);
         return workspaces.stream().map(WorkspaceService::convertToDto)
                 .collect(Collectors.toList());
     }
 
+
+    @Transactional
+    public List<WorkspaceDto> getWorkspacesByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        return getWorkspacesByUserId(user.getId());
+    }
+
+    @Transactional
     public WorkspaceDto getWorkspacesByWorkspaceId(Integer workspaceId) {
         Workspace workspace = workspaceRepository.findById(workspaceId)
                 .orElseThrow();
         return convertToDto(workspace);
     }
 
+    @Transactional
     public WorkspacesDto getWorkspacesList(String username) {
         User user = userRepository.findByUsername(username);
         return WorkspacesDto.fromWorkspaceList(workspaceRepository.findByOwnerId(user.getId()));
     }
 
+    @Transactional
     public WorkspaceDto getWorkspaceById(Integer workspaceId) {
         Workspace workspace = workspaceRepository.findById(workspaceId)
                 .orElseThrow(() -> new RuntimeException("Workspace not found"));

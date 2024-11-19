@@ -50,7 +50,12 @@ public class WorkspaceEndpointHandler implements HttpEndpointHandler {
             builder.setStatus(new HttpResponseStatus(200));
             builder.setBody(workspaces);
             return builder.build();
-        } catch (Exception e) {
+        }
+        catch (EmptyRequestException ex) {
+            builder.setBody("Empty request!");
+            return builder.build();
+        }
+        catch (Exception e) {
             builder.setStatus(new HttpResponseStatus(500)); // Internal Server Error
             builder.setBody("{\"error\": \"Internal Server Error\"}");
             return builder.build();

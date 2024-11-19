@@ -1,6 +1,7 @@
 package com.myplatform.myplatform.endpoints;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.myplatform.myplatform.dto.WorkspaceDto;
 import com.myplatform.myplatform.dto.WorkspacesDto;
 import com.myplatform.myplatform.embedded.request.http.ParametrizedHttpRequest;
 import com.myplatform.myplatform.embedded.response.http.HttpResponse;
@@ -28,14 +29,14 @@ public class WorkspacesEndpointHandler implements HttpEndpointHandler {
 
         String uuid = request.getHead().getHeaders().getContent()
                 .get(AuthenticationService.AUTHORIZATION_HEADER);
-        String username = securityContext.getAuthentication(uuid).getPrincipal().getUsername();
-        builder.setBody(workspaceService.getWorkspacesList(username));
 
+        String username = securityContext.getAuthentication(uuid).getPrincipal().getUsername();
+        builder.setBody(workspaceService.getWorkspacesByUsername(username));
         return builder.build();
     }
 
     @Override
     public Type getExpectedBodyType() {
-        return WorkspacesDto.class;
+        return WorkspaceDto.class;
     }
 }
