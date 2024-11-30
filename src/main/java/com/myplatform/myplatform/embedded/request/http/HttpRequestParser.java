@@ -14,7 +14,7 @@ public interface HttpRequestParser extends RequestParser {
 
         String[] lines = requestHead.split("\r\n");
         if (lines.length == 0) {
-            throw new EmptyRequestException();
+            throw new EmptyRequestException(requestHead);
         }
         String[] requestLine = lines[0].split(" ");
 

@@ -2,6 +2,7 @@ package com.myplatform.myplatform.service;
 
 import com.myplatform.myplatform.dto.BlockDto;
 import com.myplatform.myplatform.dto.PageDto;
+import com.myplatform.myplatform.dto.PagesDto;
 import com.myplatform.myplatform.model.Block;
 import com.myplatform.myplatform.model.Page;
 import com.myplatform.myplatform.model.Workspace;
@@ -10,6 +11,7 @@ import com.myplatform.myplatform.repo.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,18 @@ public class PageService {
 
     @Autowired
     private WorkspaceRepository workspaceRepository;
+
+
+    public Page getPageByFrontendId(Integer frontendId, Integer workspaceId) {
+        Optional<Page> pageOpt = pageRepository.findByFrontendIdAndWorkspaceId(frontendId, workspaceId);
+
+        if (pageOpt.isEmpty()) {
+            throw new RuntimeException("Page not found");
+        }
+
+        return pageOpt.get();
+    }
+
 
     public PageDto getPageByIdAndWorkspace(Integer pageId, Integer workspaceId) {
         Optional<Page> pageOpt = pageRepository.findById(pageId);
@@ -34,25 +48,23 @@ public class PageService {
     }
 
     public void updatePage(Integer pageId, Integer workspaceId, PageDto pageDto) {
-        Optional<Page> pageOpt = pageRepository.findById(pageId);
-        if (pageOpt.isEmpty() || !pageOpt.get().getWorkspace().getId().equals(workspaceId)) {
-            throw new RuntimeException("Page not found");
-        }
 
-        Page page = pageOpt.get();
+
+        Page page = getPageByFrontendId(pageId, workspaceId);
         page.setTitle(pageDto.getTitle());
         page.setContent("");
 
         if (pageDto.getPageBlocks() != null) {
-            page.getBlocks().clear();
-            page.getBlocks().addAll(pageDto.getPageBlocks().stream()
-                    .map(blockDto -> {
-                        Block block = new Block();
-                        block.setPage(page);
-                        block.setType(blockDto.getType());
+            List<Block> blocks = page.getBlocks();
+            for (Block block : blocks) {
+                for (BlockDto blockDto: pageDto.getPageBlocks())
+                    if (block.getFrontendId().equals(blockDto.getFrontendId())) {
                         block.setContent(blockDto.getContent());
-                        return block;
-                    }).collect(Collectors.toList()));
+                        block.setTitle(blockDto.getTitle());
+                        block.setType(blockDto.getTitle());
+                    }
+            }
+            page.setBlocks(blocks);
         }
 
         pageRepository.save(page);
@@ -67,7 +79,7 @@ public class PageService {
         pageRepository.delete(pageOpt.get());
     }
 
-    public PageDto addPage(Integer workspaceId, PageDto pageDto) {
+    public void addPage(Integer workspaceId, PageDto pageDto) {
         Optional<Workspace> workspaceOpt = workspaceRepository.findById(workspaceId);
         if (workspaceOpt.isEmpty()) {
             throw new RuntimeException("Workspace not found");
@@ -77,27 +89,27 @@ public class PageService {
         Page page = new Page();
         page.setTitle(pageDto.getTitle());
         page.setContent("");
-        page.setWorkspace(workspace);
 
         if (pageDto.getPageBlocks() != null) {
-            page.setBlocks(pageDto.getPageBlocks().stream()
-                    .map(blockDto -> {
-                        Block block = new Block();
-                        block.setPage(page);
-                        block.setType(blockDto.getType());
-                        block.setContent(blockDto.getContent());
-                        return block;
-                    }).collect(Collectors.toList()));
+            page.getBlocks().addAll(pageDto.getPageBlocks().stream()
+                    .map(blockDto -> BlockService.convertToEntity(blockDto, page))
+                    .collect(Collectors.toList()));
         }
 
-        Page savedPage = pageRepository.save(page);
-        return convertToDto(savedPage);
+        workspace.getPages().add(page);
+        pageRepository.save(page);
+        workspaceRepository.save(workspace);
+    }
+
+    public void addPages(Integer workspaceId, PagesDto pagesDto) {
+        pagesDto.getPages().forEach(page -> addPage(workspaceId, page));
     }
 
 
     static PageDto convertToDto(Page page) {
         PageDto dto = new PageDto();
         dto.setTitle(page.getTitle());
+        dto.setFrontendId(page.getFrontendId());
         dto.setPageBlocks(page.getBlocks().stream()
                 .map(block -> {
                     BlockDto blockDto = new BlockDto();
@@ -107,4 +119,7 @@ public class PageService {
                 }).collect(Collectors.toList()));
         return dto;
     }
+
+
+
 }

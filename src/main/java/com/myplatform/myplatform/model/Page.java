@@ -26,7 +26,10 @@ public class Page {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Column(name = "frontend_id", unique = true) // Новое поле
+    private Integer frontendId;
+
+    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Block> blocks;
 
     // Getters and Setters
@@ -68,6 +71,14 @@ public class Page {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Integer getFrontendId() {
+        return frontendId;
+    }
+
+    public void setFrontendId(Integer frontendId) {
+        this.frontendId = frontendId;
     }
 
     public List<Block> getBlocks() {

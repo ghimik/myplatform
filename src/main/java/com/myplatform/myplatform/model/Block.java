@@ -21,6 +21,13 @@ public class Block {
     @Column(name = "content", nullable = false)
     private String content;
 
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "frontend_id", nullable = false, unique = true)
+    private Integer frontendId; 
+
+    // Getters and Setters
     public Integer getId() {
         return id;
     }
@@ -51,5 +58,21 @@ public class Block {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Integer getFrontendId() {
+        return frontendId;
+    }
+
+    public void setFrontendId(Integer frontendId) {
+        this.frontendId = frontendId;
     }
 }

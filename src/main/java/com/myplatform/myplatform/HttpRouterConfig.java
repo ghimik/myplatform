@@ -16,6 +16,9 @@ import org.springframework.context.annotation.Configuration;
 public class HttpRouterConfig {
 
     @Bean
+    public BlockEndpointHandler blockEndpointHandler() {return new BlockEndpointHandler();}
+
+    @Bean
     public RegistrationEndpointHandler registrationEndpointHandler() {
         return new RegistrationEndpointHandler();
     }
@@ -87,15 +90,19 @@ public class HttpRouterConfig {
                             .addMapping("/workspaces")
                                 .setupEndpoint()
                                     .addEndpoint(this::workspaceEndpointHandler)
-                                .back()
+                            .back()
                             .addMapping("/pages")
                                 .setupEndpoint()
                                     .addEndpoint(this::pageEndpointHandler)
-                                .back()
+                            .back()
                             .addMapping("/permissions")
                                 .setupEndpoint()
                                     .addEndpoint(this::permissionEndpointHandler)
-                                .back();
+                            .back()
+                            .addMapping("/blocks")
+                                .setupEndpoint()
+                            .       addEndpoint(this::blockEndpointHandler)
+                            .back();
 
         return new DefaultHttpRouter(root);
     }

@@ -1,7 +1,9 @@
 package com.myplatform.myplatform.endpoints;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myplatform.myplatform.dto.PageDto;
+import com.myplatform.myplatform.dto.PagesDto;
 import com.myplatform.myplatform.embedded.request.http.MyHttpRequestMethod;
 import com.myplatform.myplatform.embedded.request.http.ParametrizedHttpRequest;
 import com.myplatform.myplatform.embedded.response.http.HttpResponse;
@@ -57,7 +59,8 @@ public class PageEndpointHandler implements HttpEndpointHandler {
     }
 
     private HttpResponse<?> handleUpdatePage(ParametrizedHttpRequest request, HttpResponseBuilder builder) throws JsonProcessingException {
-        PageDto body = request.getBody().parseContent();
+        ObjectMapper objectMapper = new ObjectMapper();
+        PageDto body = objectMapper.readValue(request.getBody().getStringRepresentation(), PageDto.class);
         Integer pageId = Integer.parseInt(HttpRequestHelper.getParams(request).get("pageId"));
         Integer workspaceId = Integer.parseInt(HttpRequestHelper.getParams(request).get("workspaceId"));
 
@@ -67,6 +70,7 @@ public class PageEndpointHandler implements HttpEndpointHandler {
             builder.setBody(Map.of("status", "Page updated successfully"));
             return builder.build();
         } catch (Exception e) {
+            e.printStackTrace();
             builder.setStatus(new HttpResponseStatus(400));
             builder.setBody(Map.of("error", "Invalid page data"));
             return builder.build();
@@ -90,13 +94,12 @@ public class PageEndpointHandler implements HttpEndpointHandler {
     }
 
     private HttpResponse<?> handleAddPage(ParametrizedHttpRequest request, HttpResponseBuilder builder) throws JsonProcessingException {
-        PageDto body = request.getBody().parseContent();
+        PagesDto body = request.getBody().parseContent();
         Integer workspaceId = Integer.parseInt(HttpRequestHelper.getParams(request).get("workspaceId"));
 
         try {
-            PageDto createdPage = pageService.addPage(workspaceId, body);
+            pageService.addPages(workspaceId, body);
             builder.setStatus(new HttpResponseStatus(201)); // Created
-            builder.setBody(createdPage);
             return builder.build();
         } catch (Exception e) {
             builder.setStatus(new HttpResponseStatus(400));
@@ -108,6 +111,6 @@ public class PageEndpointHandler implements HttpEndpointHandler {
 
     @Override
     public Type getExpectedBodyType() {
-        return PageDto.class;
+        return PagesDto.class;
     }
 }
