@@ -4,6 +4,7 @@ import java.util.List;
 
 public class PageDto {
     private String title;
+    private String content;
     private Integer frontendId;
     private List<BlockDto> pageBlocks;
 
@@ -29,5 +30,13 @@ public class PageDto {
 
     public void setFrontendId(Integer frontendId) {
         this.frontendId = frontendId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

@@ -31,7 +31,7 @@ public class BlockDto {
     }
 
     public Integer getFrontendId() {
-        return frontendId;
+        return frontendId ;
     }
 
     public void setFrontendId(Integer frontendId) {

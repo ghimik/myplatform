@@ -102,6 +102,7 @@ public class PageEndpointHandler implements HttpEndpointHandler {
             builder.setStatus(new HttpResponseStatus(201)); // Created
             return builder.build();
         } catch (Exception e) {
+            e.printStackTrace();
             builder.setStatus(new HttpResponseStatus(400));
             builder.setBody(Map.of("error", "Failed to create page"));
             return builder.build();

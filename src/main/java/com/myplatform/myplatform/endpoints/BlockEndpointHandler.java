@@ -29,9 +29,55 @@ public class BlockEndpointHandler implements HttpEndpointHandler {
         if (method == MyHttpRequestMethod.PUT) {
             return handleUpdateBlock(request, builder);
         }
+        if (method == MyHttpRequestMethod.POST) {
+            return handleCreateBlock(request, builder);
+        }
+        if (method == MyHttpRequestMethod.DELETE) {
+            return handleDeleteBlock(request, builder);
+        }
+
 
         return builder.setStatus(new HttpResponseStatus(405)).build(); // Method Not Allowed
     }
+
+    private HttpResponse<?> handleDeleteBlock(ParametrizedHttpRequest request, HttpResponseBuilder builder)
+            throws JsonProcessingException {
+        Integer blockId = Integer.parseInt(HttpRequestHelper.getParams(request).get("blockId"));
+        Integer pageId = Integer.parseInt(HttpRequestHelper.getParams(request).get("pageId"));
+        Integer workspaceId = Integer.parseInt(HttpRequestHelper.getParams(request).get("workspaceId"));
+
+        try {
+            blockService.deleteBlock(blockId, pageId, workspaceId);
+            builder.setStatus(new HttpResponseStatus(201)); // Created
+            builder.setBody(Map.of("Status", "Deleted successfully"));
+            return builder.build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            builder.setStatus(new HttpResponseStatus(400));
+            builder.setBody(Map.of("error", "Invalid block data"));
+            return builder.build();
+        }
+    }
+
+    private HttpResponse<?> handleCreateBlock(ParametrizedHttpRequest request, HttpResponseBuilder builder)
+            throws JsonProcessingException {
+        BlockDto body = request.getBody().parseContent();
+        Integer pageId = Integer.parseInt(HttpRequestHelper.getParams(request).get("pageId"));
+        Integer workspaceId = Integer.parseInt(HttpRequestHelper.getParams(request).get("workspaceId"));
+
+        try {
+            BlockDto createdBlock = blockService.createBlock(pageId, workspaceId, body);
+            builder.setStatus(new HttpResponseStatus(201)); // Created
+            builder.setBody(createdBlock);
+            return builder.build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            builder.setStatus(new HttpResponseStatus(400));
+            builder.setBody(Map.of("error", "Invalid block data"));
+            return builder.build();
+        }
+    }
+
 
     private HttpResponse<?> handleUpdateBlock(ParametrizedHttpRequest request, HttpResponseBuilder builder)
             throws JsonProcessingException {
